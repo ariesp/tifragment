@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-admin :: menuTiFragment"></div>
+
+	<div class="container">
+		<!-- Main component for a primary marketing message or call to action -->
+		<div class="jumbotron">
+			<h2>Welcome to Time Frame Management System</h2>
+			<p>This is a system to create and maintain a time frame for your projects. It easy to use. 
+				First you need to create your own project and its member. Enjoy !
+			</p>
+			<p>
+				<a class="btn btn-lg btn-primary" th:href="@{/base/page/admin/project/create}" role="button">New Project &raquo;</a>
+			</p>
+		</div>
+	</div>
+	
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-admin :: menuTiFragment"></div>
+	<div class="container">
+		<form id="form"  th:action="@{/base/page/admin/timeframe/createtimeframe}" th:object="${timeframe}" role="form" class="form-horizontal" method="post">
+			<fieldset>
+				<legend class="text-info">Create Time Frame</legend>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Name</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{name}" placeholder="time frame name" class="form-control" type="text" required="required"/>
+						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="help-inline">Incorrect data</span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Project</label>
+					<div class="col-lg-3">
+						<select class="form-control" th:field="*{projectUuid}" required="required">
+							<option value="" selected="selected">--Select Project--</option>
+							<option th:each="project : ${projects}" th:value="${project.uuid}" th:text="${project.projectName}"/>
+						</select>
+					</div>
+				</div>				
+				<div class="input-daterange">
+					<div class="form-group error">
+						<label for="subproject" class="col-lg-2 control-label">*Start Date</label>
+							<div class="input-group date col-md-3" data-date="${now}" data-date-format="dd-mm-yyyy">
+							    <input type="text" class="form-control" size="14" th:field="*{startDate}" readonly="readonly" required="required"/>
+							</div>
+					</div>
+					<div class="form-group error">
+						<label for="subproject" class="col-lg-2 control-label">*End Date</label>
+						<div class="input-group date col-md-3" data-date="${now}" data-date-format="dd-mm-yyyy">
+					    	<input type="text" class="form-control" size="14" th:field="*{endDate}" readonly="readonly" required="required"/>
+					    </div>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Description</label>
+					<div class="col-lg-3">
+						<textarea id="description" rows="10" cols="100" th:field="*{description}" placeholder="description" class="form-control"></textarea>
+						<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="help-inline">Incorrect data</span>
+					</div>
+				</div>
+				<div class="form-group error"></div>
+				<div class="form-group error"></div>
+				<div class="form-group error">
+					<div class="col-lg-2"></div>
+					<div class="col-lg-3">
+						<button class="btn btn-primary" type="submit">Next</button>&nbsp;&nbsp;&nbsp;							
+						<button class="btn btn-default" type="reset">Reset</button>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+
+<script type="text/javascript">
+//<![CDATA[
+	$(function(){	
+		$('.input-daterange').datepicker({
+			format: "dd-mm-yyyy",
+		    startDate: "+0d",
+		    todayBtn: "linked",
+		    orientation: "auto right",
+		    daysOfWeekDisabled: "0",
+		    calendarWeeks: true,
+		    autoclose: true
+		});
+	 });			
+//]]>
+</script>
+	
+</body>
+
+</html>

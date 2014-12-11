@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-admin :: menuTiFragment"></div>
+
+	<div class="container">
+		<fieldset>
+			<legend class="text-info">List of Project</legend>
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>Project Name</th>
+							<th>Leader</th>
+							<th>Status</th>
+							<th>Parent Project</th>
+							<th class="text-center">Operation</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="project,rowStat : ${projects.list}">
+							<td th:text="${rowStat.count}"/>
+							<td th:text="${project.projectName}"/>
+							<td th:text="${project.user.fullName}"/>
+							<td th:text="${project.timeFrame} ? 'In Developement' : 'Not Release'" />
+							<td th:text="${project.project} ? 'No' : 'Yes'" />
+							<td class="text-center">
+              					<a th:href="@{'/base/page/admin/project/detail?projectId=' + ${project.uuid}}" title="Detail"><i class="icon-check"></i></a>
+							 	<a th:href="@{'/base/page/admin/project/edit/' + ${project.uuid}}" title="Edit Data"><i class="icon-edit"></i></a>							 	
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="row">
+					<div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12">							
+						<div class="btn-group pull-left pagination">
+							<a th:href="@{/base/page/admin/project/create}"><button class="btn btn-primary" type="button">New</button></a>&nbsp;&nbsp;&nbsp;
+<!-- 							<a href=""><button class="btn btn-default" type="button">Search</button></a> -->
+						</div>							
+					</div>					
+					<div th:if="${totalPage} &gt; 1" class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 pull-right">							
+						<div class="btn-group pull-right">
+							<ul class="pagination">
+								<li th:if="${page} &gt; 1"><a class="btn" th:href="@{'/base/page/admin/project/list/' + ${max} + '/1'}" title="First Page">&laquo;</a></li>
+								<li th:each="i : ${#numbers.sequence(1, totalPage)}" th:class="${i} == ${page} ? 'active'"><a th:href="@{'/base/page/admin/project/list/' + ${max} + '/' + ${i}}" th:title="'Page' + ${i}"><span th:text="${i}"></span></a></li>
+								<li th:if="${page} &lt;  ${totalPage}"><a class="btn" th:href="@{'/base/page/admin/project/list/' + ${max} + '/' + ${totalPage}}" title="Last Page">&raquo;</a></li>
+							</ul>
+						</div>
+					</div>					
+				</div>
+				<div class="row">
+					<div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 pull-right">
+						<span class="pull-right">Found <span th:text="${projects.rowCount}"></span> Row(s)</span>					
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+</body>
+</html>

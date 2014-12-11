@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-admin :: menuTiFragment"></div>
+
+	<div class="container">
+		<fieldset>
+			<legend class="text-info">List of User</legend>
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>Name</th>
+							<th>Full Name</th>
+							<th>Email</th>
+							<th>Phone Number</th>
+							<th>Position</th>
+							<th class="text-center">Operation</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="user,rowStat : ${users.list}">
+							<td th:text="${rowStat.count}"/>
+							<td th:text="${user.name}"/>
+							<td th:text="${user.fullName}"/>
+							<td th:text="${user.email}"/>
+							<td th:text="${user.phoneNumber}"/>
+							<td th:text="${user.position} == 'developer' ? 'Developer' : 'Project Manager'"/>
+							<td class="text-center">
+              					<a th:href="@{'/base/page/admin/user/detail/' + ${user.uuid}}" title="Detail"><i class="icon-check"></i></a>
+							 	<a th:href="@{'/base/page/admin/user/edit/' + ${user.uuid}}" title="Edit Data"><i class="icon-edit"></i></a>
+							 	<a th:href="@{'/base/page/admin/user/changepassword/' + ${user.uuid}}" title="Edit Password"><i class="icon-unlock"></i></a>
+              					<a th:href="@{'/base/page/admin/user/deleteuser/' + ${user.uuid}}" class="confirmation" title="Delete"><i class="icon-remove"></i></a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="row">
+					<div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12">							
+						<div class="btn-group pull-left pagination">
+							<a th:href="@{/base/page/admin/user/create}"><button class="btn btn-primary" type="button">New</button></a>&nbsp;&nbsp;&nbsp;
+<!-- 							<a href=""><button class="btn btn-default" type="button">Search</button></a> -->
+						</div>							
+					</div>					
+					<div th:if="${totalPage} &gt; 1" class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 pull-right">							
+						<div class="btn-group pull-right">
+							<ul class="pagination">
+								<li th:if="${page} &gt; 1"><a class="btn" th:href="@{'/base/page/admin/user/list/' + ${max} + '/1'}" title="First Page">&laquo;</a></li>
+								<li th:each="i : ${#numbers.sequence(1, totalPage)}" th:class="${i} == ${page} ? 'active'"><a th:href="@{'/base/page/admin/user/list/' + ${max} + '/' + ${i}}" th:title="'Page' + ${i}"><span th:text="${i}"></span></a></li>
+								<li th:if="${page} &lt;  ${totalPage}"><a class="btn" th:href="@{'/base/page/admin/user/list/' + ${max} + '/' + ${totalPage}}" title="Last Page">&raquo;</a></li>
+							</ul>
+						</div>
+					</div>					
+				</div>
+				<div class="row">
+					<div class="col-12 col-lg-3 col-md-3 col-sm-3 col-xs-12 pull-right">
+						<span class="pull-right">Found <span th:text="${users.rowCount}"></span> Row(s)</span>					
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+
+<script type="text/javascript">
+//<![CDATA[
+ 	$('.confirmation').on('click', function () {
+        return confirm('Are you sure?');
+    });
+//]]>
+</script>
+
+</body>
+</html>

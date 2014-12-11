@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <context:component-scan base-package="ch.genidea.geniweb, ac.id.gunadarma.tifragment" />
+    
+	<security:http pattern="/assets/**" security="none" />
+
+	<security:http create-session="always" auto-config="true" use-expressions="true">
+	    <security:intercept-url pattern="/" access="permitAll"/>
+		<security:intercept-url pattern="/base/page/admin" access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/base/page/admin/user/*" access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/base/page/admin/project/*" access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/base/page/admin/timeframe/*" access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/base/page/user" access="hasRole('ROLE_USER')" />
+		<security:intercept-url pattern="/base/page/user/*" access="hasRole('ROLE_USER')" />
+		
+
+		<security:form-login login-page="/login"
+			default-target-url="/loginsuccess" authentication-failure-url="/loginfailed" />
+
+		<security:logout logout-success-url="/logout" delete-cookies="JSESSIONID" />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="myUserDetailsService">
+			<security:password-encoder ref="passwordEncoder">
+				<security:salt-source ref="saltSource" />
+			</security:password-encoder>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<bean id="myUserDetailsService" class="ch.genidea.geniweb.base.service.MyUserDetailsService" />
+	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+	<bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource" p:userPropertyToUse="username" />
+	
+</beans>

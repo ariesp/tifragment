@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-admin :: menuTiFragment"></div>
+	<div class="container">
+		<form id="form"  th:action="@{/base/page/admin/user/createuser}" th:object="${user}" role="form" class="form-horizontal" method="post">
+			<fieldset>
+				<legend class="text-info">Create User</legend>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Username</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{username}" placeholder="user name" class="form-control" type="text" required="required"/>
+						<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="label label-danger"></span>						
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Password</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{password}" placeholder="password" class="form-control" type="password" required="required"/>
+						<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="label label-danger"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Confirm Password</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{confirmPassword}" placeholder="confirm password" class="form-control" type="password" required="required"/>
+						<span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="label label-danger"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Name</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{name}" placeholder="name" class="form-control" type="text" value="" required="required"/>
+						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="label label-danger"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Full Name</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{fullName}" placeholder="full name" class="form-control" type="text" value="" />
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Phone Number</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{phoneNumber}" placeholder="ex: 08123456789" class="form-control" type="text" value="" />
+<!-- 						<span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="label label-danger"></span> -->
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Email</label>
+					<div class="col-lg-3">
+						<input id="name" th:field="*{email}" placeholder="user@yourdomain" class="form-control" type="text" value="" required="required"/>
+						<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="label label-danger"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Position</label>
+					<div class="col-lg-3" th:if="${beans.sessionAuth.getAuthenticationContext().getName()} == 'deodorant'">
+						<select class="form-control" th:field="*{position}" required="required">
+							<option value="" selected="selected">--Select Position--</option>
+							<option value="projectManager">Project Manager</option>
+							<option value="developer">Developer</option>
+						</select>
+						<span th:if="${#fields.hasErrors('position')}" th:errors="*{position}" class="label label-danger"></span>
+					</div>
+					<div class="col-lg-3" th:if="${beans.sessionAuth.getAuthenticationContext().getName()} != 'deodorant'">
+						<select class="form-control" th:field="*{position}" required="required">
+							<option value="" selected="selected">--Select Position--</option>							
+							<option value="developer">Developer</option>
+						</select>						
+					</div>
+				</div>
+				<div class="form-group error"></div>
+				<div class="form-group error"></div>
+				<div class="form-group error">
+					<div class="col-lg-2"></div>
+					<div class="col-lg-3">
+						<input id="id" th:field="*{uuid}" type="hidden"/>
+						<button class="btn btn-primary" type="submit">Save</button>&nbsp;&nbsp;&nbsp;							
+						<button class="btn btn-default" type="reset">Reset</button>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</body>
+
+</html>

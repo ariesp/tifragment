@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-user :: menuTiFragment"></div>
+	<div class="container">
+		<fieldset th:if="${tasks.size()} &gt; 0">
+			<legend class="text-info">List of Tasks</legend>
+			<div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Task Code</th>
+							<th>Task Name</th>
+							<th>Developer</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+							<th>Total Days</th>
+							<th>Description</th>								
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="task : ${tasks}">
+							<td th:text="'Task-' + ${task.id}" />
+							<td th:text="${task.taskName}" />
+							<td th:text="${task.user.fullName} == '' ? ${task.user.name} : ${task.user.fullName}" />
+							<td th:text="${beans.formatHelper.formatDate(task.startDate)}" />
+							<td th:text="${beans.formatHelper.formatDate(task.endDate)}" />
+							<td th:text="${task.startDate} == ${task.endDate} ? '1' : ${beans.formatHelper.daysBetween(beans.formatHelper.formatDate(task.startDate), beans.formatHelper.formatDate(task.endDate))}"></td>
+							<td th:text="${#strings.isEmpty(task.description)} ? '-' : ${task.description}" />								
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="form-group error"></div>
+			<div class="form-group error"></div>
+			<div class="form-group error"></div>
+		</fieldset>		
+	</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-admin :: menuTiFragment"></div>
+	<div class="container">
+		<form id="form" th:object="${project}" role="form" class="form-horizontal">
+			<fieldset>
+				<legend class="text-info">Detail Project</legend>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Project Name</label>
+					<div class="col-lg-3">
+						<span th:text="*{projectName}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">*Leader</label>
+					<div class="col-lg-3">
+						<span th:text="${project.user.fullName} == '' ? ${project.user.name} : ${project.user.fullName}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Description</label>
+					<div class="col-lg-3">
+						<textarea rows="10" cols="100" th:text="*{description}" class="form-control" disabled="disabled"></textarea>
+					</div>
+				</div>
+				<div th:if="${project.subprojects.size()} &lt; 1">
+					<div class="form-group error"></div>
+					<div class="form-group error"></div>
+					<div class="form-group error">
+						<div class="col-lg-3">
+							<a th:href="@{/base/page/admin/project/list}"><button class="btn btn-primary" type="button">Back</button></a>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset th:if="${project.subprojects.size()} &gt; 0">
+				<legend class="text-info">Sub Project</legend>
+				<div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Sub Project Name</th>
+								<th>Leader</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="subproject,rowStat : ${project.subprojects}">
+								<td th:text="${rowStat.count}" />
+								<td th:text="${subproject.projectName}" />
+								<td th:text="${subproject.user.fullName}" />
+								<td	th:text="${subproject.timeFrame} ? 'In Developement' : 'Not Release'" />
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="form-group error"></div>
+				<div class="form-group error"></div>
+				<div class="form-group error">
+					<div class="col-lg-3">
+						<a th:href="@{/base/page/admin/project/list}"><button class="btn btn-primary" type="button">Back</button></a>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</body>
+
+</html>

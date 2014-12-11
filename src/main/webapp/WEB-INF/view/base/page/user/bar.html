@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-user :: menuTiFragment"></div>
+
+	<div class="container">
+		<fieldset>
+			<legend class="text-info">View TimeFrame</legend>
+		</fieldset>
+	</div>
+	<div class="container" id="container" style="min-width: 360px; height: 540px; margin: 0 auto">
+		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+		<div><img class="center-block" th:attr="src=@{/assets/img/loader.gif}" /></div>		
+	</div>
+		
+<script th:inline="javascript">
+//<![CDATA[        
+$(document).ready(function() {		
+	$.getJSON('http://' + window.location.host + [[@{'/base/page/user/data/'}]] + [[${timeframe.uuid}]], function (json) {
+		options.title.text = 'Time Frame Project ' + json.title;
+		options.xAxis.categories = json.tasks;
+		options.yAxis.min = json.minRange-1;
+		options.subtitle.text = json.startDate + ' - ' + json.endDate;
+		options.series = json.series;
+		chart = new Highcharts.Chart(options);		
+	});
+    	
+	var options = {
+	
+	    chart: {
+	    	renderTo: 'container',
+	        type: 'columnrange',
+	        inverted: true
+	    },
+	    
+	    title: {
+	        text: ''
+	    },
+	    
+		subtitle: {
+	        text: ''
+	    },
+	
+	    xAxis: {	
+			gridLineWidth: 1,
+			gridLineDashStyle: 'shortdot',
+	        categories: [],
+	        title: {
+	            text: 'Task Code'
+	        }
+	    },
+	    
+	    yAxis: {
+			gridLineDashStyle: 'shortdot',
+            min: 1,
+			allowDecimals: false,
+	        title: {
+	            text: 'Day Ranges'
+	        }
+	    },
+	
+	    tooltip: {
+	        formatter: function() {							
+                return '<div style="color:' + this.series.color + ';">' + this.series.name + '</div><br/>' + this.x
+				+ '<br/>Total Day(s): <b>' + (this.point.high - this.point.low == 0 ? 1 : this.point.high - this.point.low) + '</b>';				
+            }
+	    },
+	    
+	    plotOptions: {
+	        columnrange: {
+	        	dataLabels: {
+	        		enabled: true,
+	        		formatter: function () {
+	        			if (this.y != null) {
+							return 'Day' + this.y;
+						}
+	        		}
+	        	},	        	
+	        	pointPadding: -0.1,	
+				minPointLength:10
+	        }
+	    },
+	    
+	    legend: {
+	        enabled: true,
+			title: {
+				text: 'Developer<br/><span style="font-size: 9px; color: #666; font-weight: normal">(Click to hide)</span>',
+				style: {
+					fontStyle: 'italic'
+                }
+			}
+	    },
+	
+	    series: []
+	
+	}    
+});
+//]]>
+</script>
+</body>
+</html>

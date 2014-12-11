@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="base/page/header :: headerTiFragment" />
+
+<body>
+	<div th:include="base/page/menu-admin :: menuTiFragment"></div>
+	<div class="container">
+		<form id="form" th:object="${timeframe}" role="form" class="form-horizontal">
+			<fieldset>
+				<legend class="text-info">Detail Time Frame</legend>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Name</label>
+					<div class="col-lg-3">
+						<span th:text="*{timeFrameName}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Project</label>
+					<div class="col-lg-3">
+						<span th:text="${timeframe.project.projectName}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Project Leader</label>
+					<div class="col-lg-3">
+						<span th:text="${timeframe.project.user.fullName} == '' ? ${timeframe.project.user.name} : ${timeframe.project.user.fullName}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Start Date</label>
+					<div class="col-lg-3">
+						<span th:text="${beans.formatHelper.formatDate(timeframe.startDate)}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">End Date</label>
+					<div class="col-lg-3">
+						<span th:text="${beans.formatHelper.formatDate(timeframe.endDate)}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Total Days</label>
+					<div class="col-lg-3">
+						<span th:text="${timeframe.startDate} == ${timeframe.endDate} ? '1' : ${beans.formatHelper.daysBetween(beans.formatHelper.formatDate(timeframe.startDate), beans.formatHelper.formatDate(timeframe.endDate))}" class="form-control"></span>
+					</div>
+				</div>
+				<div class="form-group error">
+					<label for="name" class="col-lg-2 control-label">Description</label>
+					<div class="col-lg-3">
+						<textarea rows="10" cols="100" th:text="*{description}" class="form-control" disabled="disabled"></textarea>
+					</div>
+				</div>
+				<div th:if="${timeframe.detailTimeFrames.size()} &lt; 1">
+					<div class="form-group error"></div>
+					<div class="form-group error"></div>
+					<div class="form-group error">
+						<div class="col-lg-4">
+							<a th:href="@{/base/page/admin/timeframe/list}"><button class="btn btn-primary" type="button">Back</button></a>&nbsp;&nbsp;&nbsp;
+							<a th:if="${tasks.size()} == 0" th:href="@{'/base/page/admin/timeframe/createdetail?timeframeId=' + ${timeframe.uuid}}"><button class="btn btn-default" type="button">Add Task</button></a>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset th:if="${tasks.size()} &gt; 0">
+				<legend class="text-info">List of Tasks</legend>
+				<div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Task Code</th>
+								<th>Task Name</th>
+								<th>Developer</th>
+								<th>Start Date</th>
+								<th>End Date</th>
+								<th>Total Days</th>
+								<th>Description</th>
+								<th class="text-center">Operation</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="task : ${tasks}">
+								<td th:text="'Task-' + ${task.id}" />
+								<td th:text="${task.taskName}" />
+								<td th:text="${task.user.fullName} == '' ? ${task.user.name} : ${task.user.fullName}" />
+								<td th:text="${beans.formatHelper.formatDate(task.startDate)}" />
+								<td th:text="${beans.formatHelper.formatDate(task.endDate)}" />
+								<td th:text="${task.startDate} == ${task.endDate} ? '1' : ${beans.formatHelper.daysBetween(beans.formatHelper.formatDate(task.startDate), beans.formatHelper.formatDate(task.endDate))}"></td>
+								<td th:text="${#strings.isEmpty(task.description)} ? '-' : ${task.description}" />
+								<td class="text-center">
+									<a th:href="@{'/base/page/admin/timeframe/detail/edit/' + ${task.uuid}}" title="Edit Data"><i class="icon-edit"></i></a>
+									<a th:href="@{'/base/page/admin/timeframe/deletetask/' + ${task.uuid} + '/' + ${timeframe.uuid}}" class="confirmation" title="Delete"><i class="icon-remove"></i></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="form-group error"></div>
+				<div class="form-group error"></div>
+				<div class="form-group error">
+					<div class="col-lg-4">
+						<a th:href="@{/base/page/admin/timeframe/list}"><button class="btn btn-primary" type="button">Back</button></a>&nbsp;&nbsp;&nbsp;
+						<a th:href="@{'/base/page/admin/timeframe/createdetail?timeframeId=' + ${timeframe.uuid}}"><button class="btn btn-primary" type="button">Add Task</button></a>&nbsp;&nbsp;&nbsp;
+						<a th:href="@{'/base/page/admin/timeframe/bar?timeframeId=' + ${timeframe.uuid}}"><button class="btn btn-default" type="button">View Chart</button></a>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+ 	$('.confirmation').on('click', function () {
+        return confirm('Are you sure?');
+    });
+//]]>
+</script>
+	
+</body>
+
+</html>
